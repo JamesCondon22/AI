@@ -1,0 +1,10 @@
+﻿  Enemy.cpp
+c:\users\gameuser\desktop\ai\lab1\lab1\enemy.cpp(13): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab1\lab1\enemy.cpp(14): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab1\lab1\enemy.cpp(15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  Game.cpp
+c:\users\gameuser\desktop\ai\lab1\lab1\game.cpp(51): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
+  main.cpp
+  Player.cpp
+  Generating Code...
+  Lab1.vcxproj -> C:\Users\gameuser\Desktop\AI\Lab1\Debug\Lab1.exe
