@@ -1,5 +1,8 @@
 #pragma once
+#ifndef PLAYER
+#define PLAYER
 #include <SFML/Graphics.hpp>
+#include <iostream>
 class Player
 {
 public:
@@ -11,9 +14,10 @@ public:
 	void decreaseRotation();
 	void increaseSpeed();
 	void decreaseSpeed();
+	sf::RectangleShape m_rect;
+	sf::Vector2f getPos();
 private:
 	sf::Vector2f m_position;
-	sf::RectangleShape m_rect;
 	sf::Vector2f m_velocity;
 	sf::Sprite m_sprite;
 	sf::Texture m_texture;
@@ -25,3 +29,4 @@ private:
 	sf::Vector2f m_heading;
 };
 
+#endif

@@ -1,71 +1,74 @@
-#include "Enemy.h"
+#include "FleeEnemy.h"
 
-double const Enemy::DEG_TO_RAD = 3.14 / 180.0f;
-double const Enemy::RAD_TO_DEG = 180.0f / 3.14;
-Enemy::Enemy(Game &game) :
+double const FleeEnemy::DEG_TO_RAD = 3.14 / 180.0f;
+double const FleeEnemy::RAD_TO_DEG = 180.0f / 3.14;
+
+FleeEnemy::FleeEnemy(Game &game) :
 	m_game(&game),
-	m_position(300,300),
-	m_velocity(0,0),
+	m_position(500, 500),
+	m_velocity(0, 0),
 	m_rotation(0)
 {
-	if (!m_texture.loadFromFile("enemy.png")) {
+	if (!m_texture.loadFromFile("flee.png")) {
 		//do something
 	}
 	m_rect.setTexture(&m_texture);
 	m_rect.setSize(sf::Vector2f(200, 100));
 	m_rect.setPosition(m_position);
 	srand(time(NULL));
-		
+
 }
 
 
-Enemy::~Enemy()
+FleeEnemy::~FleeEnemy()
 {
 }
 
-
-
-void Enemy::wander()
+void FleeEnemy::flee()
 {
-	m_velocity = m_game->getPlayerPos() - m_position;
+	m_velocity = m_position - m_game->getPlayerPos();
 	m_velocity = normalise();
+	m_velocity = m_velocity * maxSpeed;
 	m_rotation = getNewOrientation(m_rotation, m_velocity);
-	m_rotation = m_rotation + maxRotation * ((rand() % 2) - 1);
-	m_velocity = sf::Vector2f(-sin(m_rotation), cos(m_rotation)) * maxSpeed;
 }
-void Enemy::checkBorders()
+
+void FleeEnemy::checkBorders()
 {
 	if (m_rect.getPosition().x > 2020)
 	{
-		m_position.x = -200;
+		m_position.x = 500;
+		m_position.y = 500;
 	}
 	if (m_rect.getPosition().x < -200)
 	{
-		m_position.x = 1920;
+		m_position.x = 500;
+		m_position.y = 500;
 	}
 	if (m_rect.getPosition().y < -200)
 	{
-		m_position.y = 1080;
+		m_position.x = 500;
+		m_position.y = 500;
 	}
 	if (m_rect.getPosition().y > 1180)
 	{
-		m_position.y = -200;
+		m_position.x = 500;
+		m_position.y = 500;
 	}
 }
-void Enemy::update(double dt)
+void FleeEnemy::update(double dt)
 {
 	checkBorders();
-	//wander();
+	flee();
 	m_position += m_velocity;
 	m_rect.setPosition(m_position);
 	m_rect.setRotation(m_rotation);
-	
-	
+
+
 
 }
 
 
-float Enemy::getNewOrientation(float curOrientation, sf::Vector2f velocity)
+float FleeEnemy::getNewOrientation(float curOrientation, sf::Vector2f velocity)
 {
 	if (length(velocity) > 0)
 	{
@@ -78,12 +81,12 @@ float Enemy::getNewOrientation(float curOrientation, sf::Vector2f velocity)
 	}
 }
 
-void Enemy::render(sf::RenderWindow & window)
+void FleeEnemy::render(sf::RenderWindow & window)
 {
 	window.draw(m_rect);
 }
 
-sf::Vector2f Enemy::normalise()
+sf::Vector2f FleeEnemy::normalise()
 {
 	float length = sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y));
 	if (length != 0)
@@ -92,7 +95,7 @@ sf::Vector2f Enemy::normalise()
 		return m_velocity;
 }
 // Returns the length of the vector
-float Enemy::length(sf::Vector2f vel) {
+float FleeEnemy::length(sf::Vector2f vel) {
 	return sqrt(vel.x * vel.x + vel.y * vel.y);
 }
 

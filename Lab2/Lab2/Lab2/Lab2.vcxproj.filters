@@ -27,6 +27,12 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FleeEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SeekEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h">
@@ -41,6 +47,12 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FleeEnemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SeekEnemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="enemy.jpg">
@@ -53,6 +65,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="player.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="flee.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="wander.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

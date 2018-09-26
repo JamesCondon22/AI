@@ -122,21 +122,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="FleeEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SeekEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FleeEnemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="SeekEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="enemy.jpg" />
     <Image Include="enemy.png" />
+    <Image Include="flee.png" />
     <Image Include="player.jpg" />
     <Image Include="player.png" />
+    <Image Include="wander.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

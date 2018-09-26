@@ -8,7 +8,7 @@ Player::Player() :
 	size(100),
 	m_rotation(0),
 	m_speed(0),
-	MAX_SPEED(250)
+	MAX_SPEED(350)
 {
 	if (!m_texture.loadFromFile("player.png")) {
 		//do something
@@ -28,18 +28,16 @@ Player::~Player()
 
 void Player::update(double dt)
 {
+	
 
-	/*m_tankBase.setPosition(m_tankBase.getPosition().x + cos(m_rotation*DEG_TO_RAD) * m_speed * (dt / 1000),
-		m_tankBase.getPosition().y + sin(m_rotation * DEG_TO_RAD) * m_speed * (dt / 1000));
-	m_tankBase.setRotation(m_rotation);*/
 	m_heading.x = cos(m_rotation * DEG_TO_RAD);
 	m_heading.y = sin(m_rotation * DEG_TO_RAD);
 	m_rect.setPosition(m_rect.getPosition().x + m_heading.x * m_speed * (dt / 1000), m_rect.getPosition().y + m_heading.y* m_speed * (dt/1000));
 	m_rect.setRotation(m_rotation);
+
 	//key presses 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		//std::cout << 
 		decreaseRotation();
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -107,8 +105,13 @@ void Player::increaseSpeed()
 
 void Player::decreaseSpeed()
 {
-	if (m_speed > -MAX_SPEED)
+	if (m_speed > 0)
 	{
 		m_speed -= 1;
 	}
+}
+
+sf::Vector2f Player::getPos()
+{
+	return m_rect.getPosition();
 }

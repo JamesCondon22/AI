@@ -24,7 +24,9 @@ Game::Game()
 	int currentLevel = 1;
 
 	m_player = new Player();
-	m_enemy = new Enemy();
+	m_wanderEnemy = new Enemy(*this);
+	m_fleeEnemy = new FleeEnemy(*this);
+	m_seekEnemy = new SeekEnemy(*this);
 }
 
 
@@ -96,7 +98,16 @@ void Game::update(double dt)
 {
 	sf::Time deltaTime;
 	m_player->update(dt);
-	m_enemy->update(dt);
+	m_wanderEnemy->update(dt);
+	m_seekEnemy->update(dt);
+	m_fleeEnemy->update(dt);
+}
+
+
+sf::Vector2f Game::getPlayerPos()
+{
+	//std::cout << m_player->getPos().x + ', ' + m_player->getPos().y << std::endl;
+	return m_player->getPos();
 }
 
 
@@ -109,7 +120,9 @@ void Game::render()
 {
 	m_window.clear(sf::Color(0, 0, 0));
 	m_player->render(m_window);
-	m_enemy->render(m_window);
+	m_wanderEnemy->render(m_window);
+	m_fleeEnemy->render(m_window);
+	m_seekEnemy->render(m_window);
 	m_window.display();
 }
 

@@ -1,6 +1,6 @@
 #pragma once
-#ifndef ENEMY
-#define ENEMY
+#ifndef SEEKENEMY
+#define SEEKENEMY
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <random>
@@ -8,11 +8,11 @@
 
 class Game;
 
-class Enemy
+class SeekEnemy
 {
 public:
-	Enemy(Game & game);
-	~Enemy();
+	SeekEnemy(Game & game);
+	~SeekEnemy();
 	void update(double dt);
 	void render(sf::RenderWindow & window);
 	float getNewOrientation(float currentOrientation, sf::Vector2f velocity);
