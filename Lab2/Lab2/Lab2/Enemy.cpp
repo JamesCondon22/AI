@@ -12,6 +12,7 @@ Enemy::Enemy(Game &game) :
 		//do something
 	}
 	m_rect.setTexture(&m_texture);
+	m_rect.setOrigin(m_position.x + 100, m_position.y + 50);
 	m_rect.setSize(sf::Vector2f(200, 100));
 	m_rect.setPosition(m_position);
 	srand(time(NULL));
@@ -55,10 +56,10 @@ void Enemy::checkBorders()
 void Enemy::update(double dt)
 {
 	checkBorders();
-	//wander();
+	wander();
 	m_position += m_velocity;
 	m_rect.setPosition(m_position);
-	m_rect.setRotation(m_rotation);
+	//m_rect.setRotation(m_rotation);
 	
 	
 

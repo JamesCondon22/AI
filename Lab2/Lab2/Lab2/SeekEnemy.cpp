@@ -13,6 +13,7 @@ SeekEnemy::SeekEnemy(Game &game) :
 		//do something
 	}
 	m_rect.setTexture(&m_texture);
+
 	m_rect.setSize(sf::Vector2f(200, 100));
 	m_rect.setPosition(m_position);
 	srand(time(NULL));
@@ -46,8 +47,8 @@ void SeekEnemy::checkBorders()
 void SeekEnemy::update(double dt)
 {
 	checkBorders();
-	seek();
-	//arrive();
+	//seek();
+	arrive();
 	m_position += m_velocity;
 	m_rect.setPosition(m_position);
 	m_rect.setRotation(m_rotation);

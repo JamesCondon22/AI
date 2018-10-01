@@ -106,7 +106,6 @@ void Game::update(double dt)
 
 sf::Vector2f Game::getPlayerPos()
 {
-	//std::cout << m_player->getPos().x + ', ' + m_player->getPos().y << std::endl;
 	return m_player->getPos();
 }
 
