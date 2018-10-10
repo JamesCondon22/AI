@@ -98,16 +98,82 @@ void Arrive::render(sf::RenderWindow & window)
 	window.draw(m_rect);
 }
 
-sf::Vector2f Arrive::normalise()
-{
-	float length = sqrt((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y));
-	if (length != 0)
-		return sf::Vector2f(m_velocity.x / length, m_velocity.y / length);
-	else
-		return m_velocity;
-}
 
+sf::Vector2f Arrive::getPosition()
+{
+	return m_sprite.getPosition();
+}
+sf::Vector2f Arrive::getVelocity()
+{
+	return m_velocity;
+}
+int Arrive::getId()
+{
+	return id;
+}
 // Returns the length of the vector
 float Arrive::length(sf::Vector2f vel) {
 	return sqrt(vel.x * vel.x + vel.y * vel.y);
+}
+sf::Vector2f Arrive::normalise(sf::Vector2f vec)
+{
+	float length = sqrt((vec.x * vec.x) + (vec.y * vec.y));
+	if (length != 0)
+		return sf::Vector2f(vec.x / length, vec.y / length);
+	else
+		return vec;
+}
+
+
+sf::Vector2f Arrive::collisionAvoidance(std::vector<Enemy*> enemies)
+{
+	Enemy* enemy = new Arrive(*m_game);
+
+	float firstMin = 0;
+	float firstDistance = 0;
+	sf::Vector2f firstRelPos = sf::Vector2f(0, 0);
+	sf::Vector2f firstRelVel = sf::Vector2f(0, 0);
+
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (enemies[i]->getId() != id)
+		{
+			m_relPosition = enemies[i]->getPosition() - m_position;
+			m_relVelocity = enemies[i]->getVelocity() - m_velocity;
+			m_relSpeed = length(m_relVelocity);
+			m_timeToCollision = ((m_relPosition.x * m_relVelocity.x) + (m_relPosition.y * m_relVelocity.y)) /
+				(m_relSpeed * m_relSpeed);
+			distance = length(m_relPosition);
+			m_minSeperation = distance - m_relSpeed * m_shortestTime;
+
+			if (m_minSeperation > (m_radius * m_radius))
+			{
+				break;
+			}
+			if (m_timeToCollision > 0 && m_timeToCollision < m_shortestTime)
+			{
+				m_shortestTime = m_timeToCollision;
+				enemy = enemies[i];
+				firstMin = m_minSeperation;
+				firstDistance = distance;
+				firstRelPos = m_relPosition;
+				firstRelVel = m_relVelocity;
+
+			}
+
+		}
+
+		if (firstMin <= 0 || distance < (m_radius*m_radius))
+		{
+			m_relPosition = enemy->getPosition() - m_position;
+		}
+		else
+		{
+			m_relPosition = firstRelPos + firstRelVel * m_shortestTime;
+		}
+		m_relPosition = normalise(m_relPosition);
+		m_velocity = m_relPosition * 50.0f;
+		return m_velocity;
+
+	}
 }

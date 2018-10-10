@@ -24,10 +24,12 @@ Game::Game()
 	int currentLevel = 1;
 
 	m_player = new Player();
-	m_seek = new Seek(*this);
-	m_arrive = new Arrive(*this);
-	m_wander = new Wander(*this);
-	m_pursue = new Pursue(*this);
+	Enemy* m_pursue = new Pursue(*this);
+	Enemy* m_arrive = new Arrive(*this);
+
+
+	m_enemies.push_back(m_pursue);
+	m_enemies.push_back(m_arrive);
 }
 
 
@@ -98,12 +100,18 @@ void Game::processGameEvents(sf::Event& event)
 void Game::update(double dt)
 {
 	sf::Time deltaTime;
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_enemies[i]->update(dt);
+		//m_enemies[i]->collisionAvoidance(m_enemies);
+	}
 	m_player->update(dt);
-	m_seek->update(dt);
-	m_arrive->update(dt);
-	m_wander->update(dt);
-	m_pursue->update(dt);
+
+
+	
 }
+
+
 
 
 sf::Vector2f Game::getPlayerPos()
@@ -126,10 +134,10 @@ void Game::render()
 {
 	m_window.clear(sf::Color(0, 0, 0));
 	m_player->render(m_window);
-	m_seek->render(m_window);
-	/*m_arrive->render(m_window);
-	m_wander->render(m_window);
-	m_pursue->render(m_window);*/
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		m_enemies[i]->render(m_window);
+	}
 	m_window.display();
 }
 

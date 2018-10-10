@@ -16,7 +16,7 @@ Wander::Wander(Game &game) :
 	m_rect.setSize(sf::Vector2f(200, 100));
 	m_rect.setPosition(m_position);
 	srand(time(NULL));
-
+	
 }
 
 

@@ -5,10 +5,11 @@
 #include <iostream>
 #include <random>
 #include "Game.h"
+#include "Enemy.h"
 
 class Game;
 
-class Seek
+class Seek : public Enemy
 {
 public:
 	Seek(Game & game);

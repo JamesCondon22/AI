@@ -7,7 +7,8 @@ Pursue::Pursue(Game & game) :
 	m_maxSpeed(1.0f),
 	m_maxRotation(20.0f),
 	m_timeToTarget(100.0f),
-	maxTimePrediction(250.0f)
+	maxTimePrediction(250.0f),
+	m_relPosition(0,0)
 {
 
 	if (!m_texture.loadFromFile("wander.png")) {
@@ -41,7 +42,57 @@ float Pursue::getNewOrientation(float currentOrientation, float velocity)
 	}
 
 }
+sf::Vector2f Pursue::collisionAvoidance(std::vector<Enemy*> enemies)
+{
+	Enemy* enemy = new Pursue(*m_game);
+	float firstMin = 0;
+	float firstDistance = 0;
+	sf::Vector2f firstRelPos = sf::Vector2f(0,0);
+	sf::Vector2f firstRelVel = sf::Vector2f(0,0);
 
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (enemies[i]->getId() != id)
+		{
+			m_relPosition = enemies[i]->getPosition() - m_position;
+			m_relVelocity = enemies[i]->getVelocity() - m_velocity;
+			m_relSpeed = length(m_relVelocity);
+			m_timeToCollision = ((m_relPosition.x * m_relVelocity.x) + (m_relPosition.y * m_relVelocity.y)) /
+				(m_relSpeed * m_relSpeed);
+			distance = length(m_relPosition);
+			m_minSeperation = distance - m_relSpeed * m_shortestTime;
+			
+			if (m_minSeperation > (m_radius * m_radius))
+			{
+				break;
+			}
+			if (m_timeToCollision > 0 && m_timeToCollision < m_shortestTime)
+			{
+				m_shortestTime = m_timeToCollision;
+				enemy = enemies[i];
+				firstMin = m_minSeperation;
+				firstDistance = distance;
+				firstRelPos = m_relPosition;
+				firstRelVel = m_relVelocity;
+
+			}
+
+		}
+
+		if (firstMin <= 0 || distance < (m_radius*m_radius))
+		{
+			//m_relPosition = enemy->getPosition() - m_position;
+		}
+		else
+		{
+			m_relPosition = firstRelPos + firstRelVel * m_shortestTime;
+		}
+		m_relPosition = normalise(m_relPosition);
+		m_velocity = m_relPosition * 50.0f;
+		return m_velocity;
+
+	}
+}
 void Pursue::boundary(float x, float y)
 {
 	if (x > 2100)
@@ -88,7 +139,7 @@ void Pursue::kinematicSeek(sf::Vector2f playerPosition)
 }
 
 
-void Pursue::pursue(Player* player)
+void Pursue::pursue()
 {
 	direction = m_game->getPlayerPos() - m_position;
 	distance = std::sqrt(direction.x*direction.x + direction.y* direction.y);
@@ -110,7 +161,7 @@ void Pursue::pursue(Player* player)
 
 void Pursue::update(double dt)
 {
-	pursue(player);
+	pursue();
 
 	m_position = m_position + m_velocity;
 
@@ -124,4 +175,29 @@ void Pursue::update(double dt)
 void Pursue::render(sf::RenderWindow & window)
 {
 	window.draw(m_sprite);
+}
+
+sf::Vector2f Pursue::getPosition()
+{
+	return m_sprite.getPosition();
+}
+sf::Vector2f Pursue::getVelocity()
+{
+	return m_velocity;
+}
+int Pursue::getId()
+{
+	return id;
+}
+// Returns the length of the vector
+float Pursue::length(sf::Vector2f vel) {
+	return sqrt(vel.x * vel.x + vel.y * vel.y);
+}
+sf::Vector2f Pursue::normalise(sf::Vector2f vec)
+{
+	float length = sqrt((vec.x * vec.x) + (vec.y * vec.y));
+	if (length != 0)
+		return sf::Vector2f(vec.x / length, vec.y / length);
+	else
+		return vec;
 }

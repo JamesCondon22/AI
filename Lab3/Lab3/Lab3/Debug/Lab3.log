@@ -1,3 +1,5 @@
 ﻿  Game.cpp
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(54): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(56): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(103): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(137): warning C4018: '<': signed/unsigned mismatch
   Lab3.vcxproj -> C:\Users\gameuser\Desktop\AI\Lab3\Lab3\Debug\Lab3.exe
