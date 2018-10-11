@@ -40,7 +40,7 @@ private:
 	float m_rotation;
 	float maxSpeed;
 	float maxRotation = 0;
-	float timeToTarget = 100;
+	float timeToTarget = 10;
 	float m_orientation;
 
 	int id = 2;

@@ -8,8 +8,9 @@ Arrive::Arrive(Game &game) :
 	m_position(0, 0),
 	m_velocity(0, 0),
 	m_rotation(0),
-	maxSpeed(1.0f),
-	timeToTarget(80.0f)
+	maxSpeed(2.0f),
+	timeToTarget(80.0f),
+	m_radius(50)
 {
 	if (!m_texture.loadFromFile("wander.png")) {
 		//do something
@@ -127,8 +128,9 @@ sf::Vector2f Arrive::normalise(sf::Vector2f vec)
 
 sf::Vector2f Arrive::collisionAvoidance(std::vector<Enemy*> enemies)
 {
-	Enemy* enemy = new Arrive(*m_game);
-
+	m_shortestTime = INT_MAX;
+	//Enemy* enemy = new Arrive(*m_game);
+	sf::Vector2f enemy = sf::Vector2f(NULL, NULL);
 	float firstMin = 0;
 	float firstDistance = 0;
 	sf::Vector2f firstRelPos = sf::Vector2f(0, 0);
@@ -136,44 +138,48 @@ sf::Vector2f Arrive::collisionAvoidance(std::vector<Enemy*> enemies)
 
 	for (int i = 0; i < enemies.size(); i++)
 	{
-		if (enemies[i]->getId() != id)
+		m_relPosition = enemies[i]->getPosition() - m_position;
+		m_relVelocity = enemies[i]->getVelocity() - m_velocity;
+		m_relSpeed = length(m_relVelocity);
+		m_timeToCollision = ((m_relPosition.x * m_relVelocity.x) + (m_relPosition.y * m_relVelocity.y)) /
+			(m_relSpeed * m_relSpeed);
+		distance = length(m_relPosition);
+		m_minSeperation = distance - m_relSpeed * m_shortestTime;
+
+		if (m_minSeperation > (m_radius * m_radius))
 		{
-			m_relPosition = enemies[i]->getPosition() - m_position;
-			m_relVelocity = enemies[i]->getVelocity() - m_velocity;
-			m_relSpeed = length(m_relVelocity);
-			m_timeToCollision = ((m_relPosition.x * m_relVelocity.x) + (m_relPosition.y * m_relVelocity.y)) /
-				(m_relSpeed * m_relSpeed);
-			distance = length(m_relPosition);
-			m_minSeperation = distance - m_relSpeed * m_shortestTime;
-
-			if (m_minSeperation > (m_radius * m_radius))
-			{
-				break;
-			}
-			if (m_timeToCollision > 0 && m_timeToCollision < m_shortestTime)
-			{
-				m_shortestTime = m_timeToCollision;
-				enemy = enemies[i];
-				firstMin = m_minSeperation;
-				firstDistance = distance;
-				firstRelPos = m_relPosition;
-				firstRelVel = m_relVelocity;
-
-			}
-
+			break;
 		}
-
-		if (firstMin <= 0 || distance < (m_radius*m_radius))
+		if (m_timeToCollision > 0 && m_timeToCollision < m_shortestTime)
 		{
-			m_relPosition = enemy->getPosition() - m_position;
-		}
-		else
-		{
-			m_relPosition = firstRelPos + firstRelVel * m_shortestTime;
-		}
-		m_relPosition = normalise(m_relPosition);
-		m_velocity = m_relPosition * 50.0f;
-		return m_velocity;
-
+			m_shortestTime = m_timeToCollision;
+			enemy = enemies[i]->getPosition();
+			firstMin = m_minSeperation;
+			firstDistance = distance;
+			firstRelPos = m_relPosition;
+			firstRelVel = m_relVelocity;
+		}	
 	}
+	if (enemy == sf::Vector2f(NULL, NULL))
+	{
+		return sf::Vector2f();
+	}
+	
+	if (firstMin <= 0 || distance < (m_radius*m_radius))
+	{
+		m_relPosition = enemy - m_position;
+		//std::cout << "colliding" << std::endl;
+	}
+	else
+	{
+		m_relPosition = firstRelPos + firstRelVel * m_shortestTime;
+	}
+	m_relPosition = normalise(m_relPosition);
+	m_velocity = m_relPosition * 10.0f;
+	return m_velocity;
 }
+	
+	
+
+	
+

@@ -26,6 +26,7 @@ protected:
 	void render();
 	void processEvents();
 	void processGameEvents(sf::Event&);
+	void collisionAvoid();
 
 	// main window
 	sf::RenderWindow m_window;

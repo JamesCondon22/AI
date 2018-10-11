@@ -1,5 +1,8 @@
-﻿  Game.cpp
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(56): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(103): warning C4018: '<': signed/unsigned mismatch
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\game.cpp(137): warning C4018: '<': signed/unsigned mismatch
+﻿  Pursue.cpp
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(21): warning C4305: 'argument': truncation from 'double' to 'float'
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(44): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(53): warning C4305: '=': truncation from 'int' to 'float'
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(62): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(129): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(130): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Lab3.vcxproj -> C:\Users\gameuser\Desktop\AI\Lab3\Lab3\Debug\Lab3.exe

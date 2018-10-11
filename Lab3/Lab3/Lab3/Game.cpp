@@ -103,11 +103,20 @@ void Game::update(double dt)
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_enemies[i]->update(dt);
-		//m_enemies[i]->collisionAvoidance(m_enemies);
+		m_enemies[i]->collisionAvoidance(m_enemies);
 	}
 	m_player->update(dt);
 
 
+}
+
+void Game::collisionAvoid()
+{
+	for (int i = 0; i < m_enemies.size(); i++)
+	{
+		
+		m_enemies[i]->collisionAvoidance(m_enemies);
+	}
 	
 }
 
