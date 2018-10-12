@@ -24,7 +24,7 @@ public:
 	void checkBorders();
 	double static const DEG_TO_RAD;
 	double static const RAD_TO_DEG;
-
+	void initFont();
 	sf::Vector2f getVelocity();
 	sf::Vector2f getPosition();
 	int getId();
@@ -42,11 +42,15 @@ private:
 	float maxRotation = 0;
 	float timeToTarget = 10;
 	float m_orientation;
+	sf::Text m_label;
+	sf::Font m_font;
+
 
 	int id = 2;
 	float distance;
 	sf::Vector2f m_relVelocity;
 	sf::Vector2f m_relPosition;
+	sf::Vector2f m_steering;
 	float m_relSpeed;
 	float m_timeToCollision;
 	float m_minSeperation;

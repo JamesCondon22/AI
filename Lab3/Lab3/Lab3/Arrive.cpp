@@ -15,13 +15,29 @@ Arrive::Arrive(Game &game) :
 	if (!m_texture.loadFromFile("wander.png")) {
 		//do something
 	}
+	if (!m_font.loadFromFile("Adventure.otf"))
+	{
+		std::cout << "problem loading font" << std::endl;
+	}
+
 	m_rect.setTexture(&m_texture);
 	m_rect.setOrigin(100, 50);
-	m_rect.setSize(sf::Vector2f(200, 100));
+	m_rect.setSize(sf::Vector2f(200, 150));
 	m_position = sf::Vector2f(1920, 0);
 	m_rect.setPosition(m_position);
 	srand(time(NULL));
 
+	initFont();
+}
+
+void Arrive::initFont()
+{
+	m_label.setFont(m_font);
+	m_label.setCharacterSize(40);
+	m_label.setString("Arrive");
+	m_label.setPosition(m_position.x, m_position.y);
+	m_label.setOrigin(50, 50);
+	m_label.setFillColor(sf::Color(0, 0, 0));
 }
 
 Arrive::~Arrive()
@@ -47,6 +63,7 @@ void Arrive::checkBorders()
 		m_position.y = -200;
 	}
 }
+
 void Arrive::update(double dt)
 {
 	checkBorders();
@@ -54,6 +71,10 @@ void Arrive::update(double dt)
 	m_position += m_velocity;
 	m_rect.setPosition(m_position);
 	m_rect.setRotation(m_orientation);
+
+	//resetting label postions
+	m_label.setPosition(m_position);
+	m_label.setRotation(m_orientation);
 }
 
 void Arrive::arrive()
@@ -97,6 +118,7 @@ float Arrive::getNewOrientation(float curOrientation, float velocity)
 void Arrive::render(sf::RenderWindow & window)
 {
 	window.draw(m_rect);
+	window.draw(m_label);
 }
 
 
@@ -125,60 +147,10 @@ sf::Vector2f Arrive::normalise(sf::Vector2f vec)
 		return vec;
 }
 
-
 sf::Vector2f Arrive::collisionAvoidance(std::vector<Enemy*> enemies)
 {
-	m_shortestTime = INT_MAX;
-	//Enemy* enemy = new Arrive(*m_game);
-	sf::Vector2f enemy = sf::Vector2f(NULL, NULL);
-	float firstMin = 0;
-	float firstDistance = 0;
-	sf::Vector2f firstRelPos = sf::Vector2f(0, 0);
-	sf::Vector2f firstRelVel = sf::Vector2f(0, 0);
-
-	for (int i = 0; i < enemies.size(); i++)
-	{
-		m_relPosition = enemies[i]->getPosition() - m_position;
-		m_relVelocity = enemies[i]->getVelocity() - m_velocity;
-		m_relSpeed = length(m_relVelocity);
-		m_timeToCollision = ((m_relPosition.x * m_relVelocity.x) + (m_relPosition.y * m_relVelocity.y)) /
-			(m_relSpeed * m_relSpeed);
-		distance = length(m_relPosition);
-		m_minSeperation = distance - m_relSpeed * m_shortestTime;
-
-		if (m_minSeperation > (m_radius * m_radius))
-		{
-			break;
-		}
-		if (m_timeToCollision > 0 && m_timeToCollision < m_shortestTime)
-		{
-			m_shortestTime = m_timeToCollision;
-			enemy = enemies[i]->getPosition();
-			firstMin = m_minSeperation;
-			firstDistance = distance;
-			firstRelPos = m_relPosition;
-			firstRelVel = m_relVelocity;
-		}	
-	}
-	if (enemy == sf::Vector2f(NULL, NULL))
-	{
-		return sf::Vector2f();
-	}
-	
-	if (firstMin <= 0 || distance < (m_radius*m_radius))
-	{
-		m_relPosition = enemy - m_position;
-		//std::cout << "colliding" << std::endl;
-	}
-	else
-	{
-		m_relPosition = firstRelPos + firstRelVel * m_shortestTime;
-	}
-	m_relPosition = normalise(m_relPosition);
-	m_velocity = m_relPosition * 10.0f;
 	return m_velocity;
 }
-	
 	
 
 	

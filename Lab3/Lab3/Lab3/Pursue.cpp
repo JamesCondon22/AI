@@ -2,41 +2,60 @@
 
 Pursue::Pursue(Game & game) :
 	m_game(&game),
-	m_position(500, 500),
+	m_position(0, 0),
 	m_velocity(0, 0),
-	m_maxSpeed(2.0f),
+	m_relVelocity(0, 0),
+	shape(100.0f),
+	m_maxSpeed(3.0f),
 	m_maxRotation(20.0f),
-	m_timeToTarget(100.0f),
-	maxTimePrediction(250.0f),
-	m_relPosition(0,0),
-	m_radius(50)
+	m_timeToTarget(80.0f),
+	m_maxTimePrediction(3.0f),
+	m_relSpeed(0.0f),
+	m_radius(10.0f)
 {
 
 	if (!m_texture.loadFromFile("wander.png")) {
-		//error
+		//do something
 	}
+	if (!m_font.loadFromFile("Adventure.otf"))
+	{
+		std::cout << "problem loading font" << std::endl;
+	}
+	m_rect.setTexture(&m_texture);
+	m_rect.setOrigin(100, 50);
+	m_rect.setSize(sf::Vector2f(200, 150));
+	m_position = sf::Vector2f(0, 0);
+	m_rect.setPosition(m_position);
 
-	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(m_position);
-	m_sprite.setScale(0.3, 0.3);
-	m_velocity.x = getRandom(20, -10);
-	m_velocity.y = getRandom(20, -10);
-
-	m_sprite.setOrigin(m_position.x - (m_sprite.getTextureRect().width / 2), m_position.y - (m_sprite.getTextureRect().height / 2));
+	initFont();
 
 }
-
-Pursue::Pursue()
+void Pursue::initFont()
 {
-
+	m_label.setFont(m_font);
+	m_label.setCharacterSize(40);
+    m_label.setString("Pursue");
+	m_label.setPosition(m_position.x, m_position.y);
+	m_label.setOrigin(50, 50);
+	m_label.setFillColor(sf::Color(0, 0, 0));
 }
-
 
 Pursue::~Pursue()
 {
 
 }
-
+sf::Vector2f Pursue::getPosition()
+{
+	return m_rect.getPosition();
+}
+sf::Vector2f Pursue::getVelocity()
+{
+	return m_velocity;
+}
+int Pursue::getId()
+{
+	return id;
+}
 float Pursue::getNewOrientation(float currentOrientation, float velocity)
 {
 	if (velocity >0)
@@ -48,78 +67,33 @@ float Pursue::getNewOrientation(float currentOrientation, float velocity)
 	}
 
 }
-sf::Vector2f Pursue::collisionAvoidance(std::vector<Enemy*> enemies)
+void Pursue::respawn(float x, float y)
 {
-	m_shortestTime = INT_MAX;
 
-	//Enemy* enemy = new Pursue(*m_game);
-	sf::Vector2f enemy = sf::Vector2f(NULL, NULL);
-	float firstMin = 0;
-	float firstDistance = 0;
-	sf::Vector2f firstRelPos = sf::Vector2f(0,0);
-	sf::Vector2f firstRelVel = sf::Vector2f(0,0);
 
-	for (int i = 0; i < enemies.size(); i++)
+	if (x > 2020)
 	{
-		
-		m_relPosition = enemies[i]->getPosition() - m_position;
-		m_relVelocity = enemies[i]->getVelocity() - m_velocity;
-		m_relSpeed = length(m_relVelocity);
-		m_timeToCollision = ((m_relPosition.x * m_relVelocity.x) + (m_relPosition.y * m_relVelocity.y)) /
-			(m_relSpeed * m_relSpeed);
-		distance = length(m_relPosition);
-		m_minSeperation = distance - m_relSpeed * m_shortestTime;
-
-		if (m_minSeperation > (m_radius * m_radius))
-		{
-			break;
-		}
-		if (m_timeToCollision > 0 && m_timeToCollision < m_shortestTime)
-		{
-			m_shortestTime = m_timeToCollision;
-			enemy = enemies[i]->getPosition();
-			firstMin = m_minSeperation;
-			firstDistance = distance;
-			firstRelPos = m_relPosition;
-			firstRelVel = m_relVelocity;
-		}
+		m_position.x = -200;
+		m_velocity.x = getRandom(10, 1);
+		m_velocity.y = getRandom(21, -10);
 	}
-	if (enemy == sf::Vector2f(NULL, NULL))
+	if (x < -200)
 	{
-		return sf::Vector2f();
+		m_position.x = 1920;
+		m_velocity.x = getRandom(-10, -1);
+		m_velocity.y = getRandom(21, -10);
 	}
-
-	if (firstMin <= 0 || distance < (m_radius*m_radius))
+	if (y < -200)
 	{
-		m_relPosition = enemy - m_position;
-		std::cout << "colliding" << std::endl;
+		m_position.y = 1080;
+		m_velocity.x = getRandom(21, -10);
+		m_velocity.y = getRandom(-10, -1);
 	}
-	else
+	if (y > 1180)
 	{
-		m_relPosition = firstRelPos + firstRelVel * m_shortestTime;
-	}
-	
-	m_relPosition = normalise(m_relPosition);
-	m_velocity = m_relPosition * 10.0f;
-	return m_velocity;
-}
-void Pursue::boundary(float x, float y)
-{
-	if (x > 2100)
-	{
-		m_position.x = -100;
-	}
-	if (x < -100)
-	{
-		m_position.x = 2100;
-	}
-	if (y < -100)
-	{
-		m_position.y = 2100;
-	}
-	if (y > 2100)
-	{
-		m_position.y = -100;
+		m_position.y = -200;
+		m_velocity.x = getRandom(21, -10);
+		m_velocity.y = getRandom(10, 1);
 	}
 
 }
@@ -129,14 +103,44 @@ float Pursue::getRandom(int a, int b)
 	srand(time(NULL));
 	float randVal = rand() % a + b;
 	return randVal;
+
 }
 
+sf::Vector2f Pursue::collisionAvoidance(std::vector<Enemy*> enemies) {
+
+
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (enemies[i]->getId() != id)
+		{
+			//Vector player to enemy
+			m_direction = enemies[i]->getPosition() - m_position;
+			m_distance = std::sqrt(m_direction.x*m_direction.x + m_direction.y* m_direction.y);
+
+			if (m_distance <= m_radius)
+			{
+				float dot = (m_velocity.x * m_direction.x) + (m_velocity.y * m_direction.y);
+				float det = (m_velocity.x * m_direction.y) - (m_velocity.y * m_direction.x);
+
+				float angle = atan2(det, dot);
+
+				if (angle >= -20 && angle <= 20)
+				{
+					kinematicFlee(enemies[i]->getPosition());
+				}
+			}
+
+
+
+		}
+	}
+	return m_velocity;
+}
 void Pursue::kinematicSeek(sf::Vector2f playerPosition)
 {
 	m_velocity = playerPosition - m_position;
 	//Get magnitude of vector
 	m_velocityF = std::sqrt(m_velocity.x*m_velocity.x + m_velocity.y* m_velocity.y);
-
 	//Normalize vector
 	m_velocity.x = m_velocity.x / m_velocityF;
 	m_velocity.y = m_velocity.y / m_velocityF;
@@ -147,67 +151,89 @@ void Pursue::kinematicSeek(sf::Vector2f playerPosition)
 	m_orientation = getNewOrientation(m_orientation, m_velocityF);
 
 }
-
-
-void Pursue::pursue()
+void Pursue::kinematicFlee(sf::Vector2f enemyPosition)
 {
-	direction = m_game->getPlayerPos() - m_position;
-	distance = std::sqrt(direction.x*direction.x + direction.y* direction.y);
-	speed = std::sqrt(m_velocity.x*m_velocity.x + m_velocity.y* m_velocity.y);
+	m_velocity = m_position - enemyPosition;
+	//Get magnitude of vector
+	m_velocityF = std::sqrt(m_velocity.x*m_velocity.x + m_velocity.y* m_velocity.y);
+	//Normalize vector
+	m_velocity.x = m_velocity.x / m_velocityF;
+	m_velocity.y = m_velocity.y / m_velocityF;
 
-	if (speed <= distance / maxTimePrediction)
+	m_velocity.x = m_velocity.x * m_maxSpeed;
+	m_velocity.y = m_velocity.y * m_maxSpeed;
+
+	m_orientation = getNewOrientation(m_orientation, m_velocityF);
+
+}
+void Pursue::kinematicArrive(sf::Vector2f playerPosition)
+{
+	//Get magnitude of vector
+	m_velocityF = std::sqrt(m_velocity.x*m_velocity.x + m_velocity.y* m_velocity.y);
+
+	m_velocity = playerPosition - m_position;
+
+	if (m_velocityF >= 0)
 	{
-		timePrediction = maxTimePrediction;
+		m_velocity = m_velocity / m_timeToTarget;
+
+		if (m_velocityF > m_maxSpeed) {
+
+			//Normalize vector
+			m_velocity.x = m_velocity.x / m_velocityF;
+			m_velocity.y = m_velocity.y / m_velocityF;
+
+			m_velocity = m_velocity * m_maxSpeed;
+
+		}
+
+		m_orientation = getNewOrientation(m_orientation, m_velocityF);
+	}
+
+}
+void Pursue::pursue(sf::Vector2f playerPosition, sf::Vector2f playerVelocity) 
+{
+
+	m_direction = playerPosition - m_position;
+
+
+	m_distance = std::sqrt(m_direction.x*m_direction.x + m_direction.y* m_direction.y);
+
+
+	m_speed = std::sqrt(m_velocity.x*m_velocity.x + m_velocity.y* m_velocity.y);
+
+	if (m_speed <= m_distance / m_maxTimePrediction) {
+
+		m_timePrediction = m_maxTimePrediction;
 	}
 	else {
-		timePrediction = distance / speed;
+		m_timePrediction = m_distance / m_speed;
 	}
 
-	newTarget = m_game->getPlayerPos() + m_game->getPlayerVel() * timePrediction;
+	m_targetPos = playerPosition + playerVelocity * m_timePrediction;
 
-	kinematicSeek(newTarget);
+
+	kinematicArrive(m_targetPos);
+
 }
-
-
 void Pursue::update(double dt)
 {
-	pursue();
 
+	pursue(m_game->getPlayerPos(), m_game->getPlayerVel());
 	m_position = m_position + m_velocity;
+	m_rect.setPosition(m_position);
+	m_rect.setRotation(m_orientation);
+	respawn(m_rect.getPosition().x, m_rect.getPosition().y);
 
-	m_sprite.setPosition(m_position);
-	m_sprite.setRotation(m_orientation);
-
-	boundary(m_sprite.getPosition().x, m_sprite.getPosition().y);
+	//resetting label postions
+	m_label.setPosition(m_position);
+	m_label.setRotation(m_orientation);
 }
 
 
 void Pursue::render(sf::RenderWindow & window)
 {
-	window.draw(m_sprite);
-}
 
-sf::Vector2f Pursue::getPosition()
-{
-	return m_sprite.getPosition();
-}
-sf::Vector2f Pursue::getVelocity()
-{
-	return m_velocity;
-}
-int Pursue::getId()
-{
-	return id;
-}
-// Returns the length of the vector
-float Pursue::length(sf::Vector2f vel) {
-	return sqrt(vel.x * vel.x + vel.y * vel.y);
-}
-sf::Vector2f Pursue::normalise(sf::Vector2f vec)
-{
-	float length = sqrt((vec.x * vec.x) + (vec.y * vec.y));
-	if (length != 0)
-		return sf::Vector2f(vec.x / length, vec.y / length);
-	else
-		return vec;
+	window.draw(m_rect);
+	window.draw(m_label);
 }

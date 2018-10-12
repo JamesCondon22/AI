@@ -103,22 +103,12 @@ void Game::update(double dt)
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_enemies[i]->update(dt);
-		m_enemies[i]->collisionAvoidance(m_enemies);
 	}
 	m_player->update(dt);
 
 
 }
 
-void Game::collisionAvoid()
-{
-	for (int i = 0; i < m_enemies.size(); i++)
-	{
-		
-		m_enemies[i]->collisionAvoidance(m_enemies);
-	}
-	
-}
 
 
 
@@ -141,7 +131,7 @@ sf::Vector2f Game::getPlayerVel()
 /// </summary>
 void Game::render()
 {
-	m_window.clear(sf::Color(0, 0, 0));
+	m_window.clear(sf::Color(255, 255, 255));
 	m_player->render(m_window);
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
