@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Pursue.h"
 #include "Arrive.h"
+#include "Seek.h"
+#include "Wander.h"
 #include "Enemy.h"
 #include <SFML/Graphics.hpp>
 
@@ -26,7 +28,6 @@ protected:
 	void render();
 	void processEvents();
 	void processGameEvents(sf::Event&);
-	void collisionAvoid();
 
 	// main window
 	sf::RenderWindow m_window;

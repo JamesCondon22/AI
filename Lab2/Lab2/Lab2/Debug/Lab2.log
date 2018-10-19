@@ -1,4 +1,8 @@
 ﻿  Enemy.cpp
 c:\users\gameuser\desktop\ai\lab2\lab2\lab2\enemy.cpp(18): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\gameuser\desktop\ai\lab2\lab2\lab2\enemy.cpp(73): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  SeekEnemy.cpp
+c:\users\gameuser\desktop\ai\lab2\lab2\lab2\seekenemy.cpp(19): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab2\lab2\lab2\seekenemy.cpp(86): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   Lab2.vcxproj -> C:\Users\gameuser\Desktop\AI\Lab2\Lab2\Debug\Lab2.exe

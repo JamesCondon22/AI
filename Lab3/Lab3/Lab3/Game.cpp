@@ -25,11 +25,17 @@ Game::Game()
 
 	m_player = new Player();
 	Enemy* m_pursue = new Pursue(*this);
-	Enemy* m_arrive = new Arrive(*this);
+	Enemy* m_arriveOne = new Arrive(*this, 70.0f);
+	Enemy* m_arriveTwo = new Arrive(*this, 110.0f);
+	Enemy* m_wander = new Wander(*this);
+	Enemy* m_seek = new Seek(*this);
 
 
 	m_enemies.push_back(m_pursue);
-	m_enemies.push_back(m_arrive);
+	m_enemies.push_back(m_arriveOne);
+	m_enemies.push_back(m_arriveTwo);
+	m_enemies.push_back(m_wander);
+	m_enemies.push_back(m_seek);
 }
 
 
@@ -103,6 +109,7 @@ void Game::update(double dt)
 	for (int i = 0; i < m_enemies.size(); i++)
 	{
 		m_enemies[i]->update(dt);
+		m_enemies[i]->collisionAvoidance(m_enemies);
 	}
 	m_player->update(dt);
 

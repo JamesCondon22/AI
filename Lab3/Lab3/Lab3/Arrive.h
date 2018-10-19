@@ -12,13 +12,13 @@ class Game;
 class Arrive : public Enemy
 {
 public:
-	Arrive(Game & game);
+	Arrive(Game & game, float time);
 	~Arrive();
 	void update(double dt);
 	void render(sf::RenderWindow & window);
 	float getNewOrientation(float currentOrientation, float velocity);
 	sf::Vector2f normalise(sf::Vector2f vec);
-	sf::Vector2f collisionAvoidance(std::vector<Enemy*> enemies);
+	void collisionAvoidance(std::vector<Enemy*> enemies);
 	float length(sf::Vector2f vel);
 	void arrive();
 	void checkBorders();
@@ -32,6 +32,8 @@ private:
 	sf::Vector2f m_position;
 	sf::RectangleShape m_rect;
 	sf::Vector2f m_velocity;
+	sf::Vector2f m_direction;
+	float m_distance;
 	float m_velocityF;
 	sf::Sprite m_sprite;
 	sf::Texture m_texture;
@@ -51,11 +53,14 @@ private:
 	sf::Vector2f m_relVelocity;
 	sf::Vector2f m_relPosition;
 	sf::Vector2f m_steering;
-	float m_relSpeed;
-	float m_timeToCollision;
-	float m_minSeperation;
-	float m_shortestTime;
 	float m_radius;
+
+	float m_threshold;
+	int m_behaviour;
+	double m_seconds;
+	double m_time;
+	sf::Clock m_clock;
+	bool m_startTimer;
 };
 
 #endif

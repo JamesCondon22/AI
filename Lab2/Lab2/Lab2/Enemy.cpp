@@ -4,7 +4,7 @@ double const Enemy::DEG_TO_RAD = 3.14 / 180.0f;
 double const Enemy::RAD_TO_DEG = 180.0f / 3.14;
 Enemy::Enemy(Game &game) :
 	m_game(&game),
-	m_position(300,300),
+	m_position(0,0),
 	m_velocity(0,0),
 	m_rotation(0)
 {
@@ -59,7 +59,7 @@ void Enemy::update(double dt)
 	wander();
 	m_position += m_velocity;
 	m_rect.setPosition(m_position);
-	//m_rect.setRotation(m_rotation);
+	m_rect.setRotation(m_rotation);
 	
 	
 
@@ -96,4 +96,3 @@ sf::Vector2f Enemy::normalise()
 float Enemy::length(sf::Vector2f vel) {
 	return sqrt(vel.x * vel.x + vel.y * vel.y);
 }
-

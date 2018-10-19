@@ -3,14 +3,17 @@
 double const Arrive::DEG_TO_RAD = 3.14 / 180.0f;
 double const Arrive::RAD_TO_DEG = 180.0f / 3.14;
 
-Arrive::Arrive(Game &game) :
+Arrive::Arrive(Game &game, float speedTime) :
 	m_game(&game),
 	m_position(0, 0),
 	m_velocity(0, 0),
 	m_rotation(0),
 	maxSpeed(2.0f),
-	timeToTarget(80.0f),
-	m_radius(50)
+	timeToTarget(speedTime),
+	m_radius(75.0f),
+	m_threshold(30.0f),
+	m_behaviour(1),
+	m_startTimer(false)
 {
 	if (!m_texture.loadFromFile("wander.png")) {
 		//do something
@@ -22,7 +25,7 @@ Arrive::Arrive(Game &game) :
 
 	m_rect.setTexture(&m_texture);
 	m_rect.setOrigin(100, 50);
-	m_rect.setSize(sf::Vector2f(200, 150));
+	m_rect.setSize(sf::Vector2f(100, 75));
 	m_position = sf::Vector2f(1920, 0);
 	m_rect.setPosition(m_position);
 	srand(time(NULL));
@@ -35,8 +38,7 @@ void Arrive::initFont()
 	m_label.setFont(m_font);
 	m_label.setCharacterSize(40);
 	m_label.setString("Arrive");
-	m_label.setPosition(m_position.x, m_position.y);
-	m_label.setOrigin(50, 50);
+	m_label.setPosition(m_rect.getPosition());
 	m_label.setFillColor(sf::Color(0, 0, 0));
 }
 
@@ -67,14 +69,30 @@ void Arrive::checkBorders()
 void Arrive::update(double dt)
 {
 	checkBorders();
-	arrive();
+	if (m_behaviour == 1)
+	{
+		arrive();
+	}
 	m_position += m_velocity;
 	m_rect.setPosition(m_position);
 	m_rect.setRotation(m_orientation);
 
+	if (m_startTimer)
+	{
+		m_time += m_clock.restart().asMilliseconds();
+	}
+	else
+	{
+		m_seconds = 0;
+	}
+	if (m_time > 1000)
+	{
+		m_seconds += 1;
+		m_time = 0;
+	}
+	std::cout << m_seconds << std::endl;
 	//resetting label postions
-	m_label.setPosition(m_position);
-	m_label.setRotation(m_orientation);
+	m_label.setPosition(m_rect.getPosition().x - 50, m_rect.getPosition().y - 130);
 }
 
 void Arrive::arrive()
@@ -124,7 +142,7 @@ void Arrive::render(sf::RenderWindow & window)
 
 sf::Vector2f Arrive::getPosition()
 {
-	return m_sprite.getPosition();
+	return m_rect.getPosition();
 }
 sf::Vector2f Arrive::getVelocity()
 {
@@ -147,9 +165,48 @@ sf::Vector2f Arrive::normalise(sf::Vector2f vec)
 		return vec;
 }
 
-sf::Vector2f Arrive::collisionAvoidance(std::vector<Enemy*> enemies)
+void Arrive::collisionAvoidance(std::vector<Enemy*> enemies)
 {
-	return m_velocity;
+	for (int i = 0; i < enemies.size(); i++)
+	{
+		if (enemies[i]->getPosition() != m_position)
+		{
+			//Vector player to enemy
+			m_direction = enemies[i]->getPosition() - m_position;
+			m_distance = std::sqrt(m_direction.x*m_direction.x + m_direction.y* m_direction.y);
+
+
+
+			if (m_distance <= m_radius)
+			{
+				float dot = (m_velocity.x * m_direction.x) + (m_velocity.y * m_direction.y);
+				float det = (m_velocity.x * m_direction.y) - (m_velocity.y * m_direction.x);
+
+				float angle = atan2(det, dot);
+				angle = (180 / 3.14) * angle;
+
+
+
+				if (angle >= -m_threshold && angle <= m_threshold)
+				{
+					m_behaviour = 2;
+					m_velocity = -m_velocity;
+					m_orientation -=180;
+
+				}
+
+
+			}
+			if (m_behaviour == 2 && m_distance > m_radius * 2)
+			{
+				m_behaviour = 1;
+				
+			}
+
+			
+
+		}
+	}
 }
 	
 

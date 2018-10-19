@@ -105,6 +105,7 @@ sf::Vector2f SeekEnemy::normalise()
 	else
 		return m_velocity;
 }
+
 // Returns the length of the vector
 float SeekEnemy::length(sf::Vector2f vel) {
 	return sqrt(vel.x * vel.x + vel.y * vel.y);

@@ -16,7 +16,7 @@ public:
 	void kinematicArrive(sf::Vector2f playerPosition);
 	void kinematicFlee(sf::Vector2f enemyPosition);
 	void pursue(sf::Vector2f playerPosition, sf::Vector2f playerVelocity);
-	sf::Vector2f collisionAvoidance(std::vector<Enemy*> enemies);
+	void collisionAvoidance(std::vector<Enemy*> enemies);
 	void respawn(float x, float y);
 	float getRandom(int x, int y);
 	void update(double dt);
@@ -42,7 +42,6 @@ private:
 	float m_maxSpeed;
 	float m_maxRotation;
 	float m_distance;
-	sf::Sprite m_sprite;
 	sf::Texture m_texture;
 	sf::CircleShape shape;
 	sf::RectangleShape m_rect;
@@ -53,16 +52,13 @@ private:
 	sf::Vector2f m_relVelocity;
 	sf::Vector2f m_relPosition;
 	float m_relSpeed;
-	float m_timeToCollision;
-	float m_minSeperation;
-	float m_shortestTime;
 	float m_radius;
-	sf::Vector2f m_firstTarget;
-	float m_firstMinSeperation;
-	float m_firstDistance;
 	sf::Vector2f m_firstRelativePos;
 	sf::Vector2f m_firstRelativeVel;
 
+
+	float m_threshold;
+	int m_behaviour;
 };
 
 

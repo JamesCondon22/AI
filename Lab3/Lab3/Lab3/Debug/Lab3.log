@@ -1,10 +1,21 @@
-﻿  Arrive.cpp
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\arrive.cpp(28): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\arrive.cpp(109): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  Pursue.cpp
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(63): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(103): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(104): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(112): warning C4018: '<': signed/unsigned mismatch
+﻿  Pursue.cpp
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(33): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(69): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(109): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(110): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(121): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\pursue.cpp(137): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Seek.cpp
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\seek.cpp(29): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\seek.cpp(93): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\seek.cpp(128): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\seek.cpp(144): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Wander.cpp
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\wander.cpp(28): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\wander.cpp(66): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\wander.cpp(67): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\wander.cpp(111): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\wander.cpp(145): warning C4018: '<': signed/unsigned mismatch
+c:\users\gameuser\desktop\ai\lab3\lab3\lab3\wander.cpp(161): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Generating Code...
   Lab3.vcxproj -> C:\Users\gameuser\Desktop\AI\Lab3\Lab3\Debug\Lab3.exe
