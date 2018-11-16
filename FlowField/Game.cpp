@@ -35,6 +35,8 @@ Game::Game()
 			m_tile[j][i] = new Tile(25 * j,25 * i,m_font);
 		}	
 	}
+
+	initObstacles();
 }
 
 
@@ -176,3 +178,29 @@ void Game::render()
 	m_window.display();
 }
 
+void Game::initObstacles() {
+	m_tile[5][10]->setObstacle();
+	m_tile[5][11]->setObstacle();
+	m_tile[5][12]->setObstacle();
+	m_tile[5][13]->setObstacle();
+	m_tile[5][14]->setObstacle();
+
+	m_tile[20][20]->setObstacle();
+	m_tile[20][21]->setObstacle();
+	m_tile[20][22]->setObstacle();
+	m_tile[20][23]->setObstacle();
+	m_tile[20][24]->setObstacle();
+	m_tile[20][25]->setObstacle();
+	m_tile[21][25]->setObstacle();
+	m_tile[22][25]->setObstacle();
+	m_tile[23][25]->setObstacle();
+	m_tile[24][25]->setObstacle();
+	m_tile[25][25]->setObstacle();
+	m_tile[26][25]->setObstacle();
+
+	m_tile[35][35]->setObstacle();
+	m_tile[35][36]->setObstacle();
+	m_tile[35][37]->setObstacle();
+	m_tile[35][38]->setObstacle();
+	m_tile[35][39]->setObstacle();
+}

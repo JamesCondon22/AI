@@ -18,6 +18,7 @@ protected:
 	void processEvents();
 	void processGameEvents(sf::Event&);
 	void generateDijkstraGrid();
+	void initObstacles();
 	// main window
 	sf::RenderWindow m_window;
 	//std::vector<Tile*> m_tiles;

@@ -20,6 +20,7 @@ public:
 	void changeColor();
 	void setGoal();
 	void setStart();
+	void setObstacle();
 private:
 	sf::RectangleShape m_rect;
 	sf::Vector2f m_position;

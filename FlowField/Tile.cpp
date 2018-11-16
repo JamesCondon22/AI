@@ -29,6 +29,11 @@ void Tile::changeColor()
 	m_current = Obstacles::Blank;
 }
 
+void Tile::setObstacle()
+{
+	m_current = Obstacles::Obstacle;
+}
+
 void Tile::update(double dt)
 {
 
