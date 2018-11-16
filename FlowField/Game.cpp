@@ -22,24 +22,17 @@ Game::Game()
 
 	m_window.setVerticalSyncEnabled(true);
 	
-	if (!m_font.loadFromFile("Adventure.otf"))
+	if (!m_font.loadFromFile("mytype.ttf"))
 	{
 		std::cout << "problem loading font" << std::endl;
 	}
 	mouse.setPosition(sf::Vector2i(0, 0), m_window);
 	
-	int x = 0;
-	int y = 0;
+	
 
-	for (int i = 0; i <= 50; i++) {
-		for (int j = 0; j <= 50; j++) {	 
-			m_tile[i][j] = new Tile(x,y,m_font);
-			x += 25;
-			if (x > 1250) {
-				y += 25;
-				x = 0;
-			}
-			//m_tiles.push_back(m_tile);
+	for (int i = 0; i < 50; i++) {
+		for (int j = 0; j < 50; j++) {	 
+			m_tile[j][i] = new Tile(25 * j,25 * i,m_font);
 		}	
 	}
 }
@@ -121,9 +114,12 @@ void Game::processGameEvents(sf::Event& event)
 				int x = mouse.getPosition(m_window).x / 25;
 				int y = mouse.getPosition(m_window).y / 25;
 				std::cout << x << ", " << y << std::endl;
-				m_starttile->changeColor();
-				m_starttile = m_tile[y][x];
-				m_tile[y][x]->setStart();
+				if (m_starttile != NULL)
+				{
+					m_starttile->changeColor();
+				}
+				m_starttile = m_tile[x][y];
+				m_tile[x][y]->setStart();
 			}
 		}
 	}
@@ -134,9 +130,11 @@ void Game::processGameEvents(sf::Event& event)
 				int x = mouse.getPosition(m_window).x / 25;
 				int y = mouse.getPosition(m_window).y / 25;
 				std::cout << x << ", " << y << std::endl;
-				m_goaltile->changeColor();
-				m_goaltile = m_tile[y][x];
-				m_tile[y][x]->setGoal();
+				if (m_goaltile != NULL) {
+					m_goaltile->changeColor();
+				}
+				m_goaltile = m_tile[x][y];
+				m_tile[x][y]->setGoal();
 			}
 		}
 	}
@@ -150,7 +148,7 @@ void Game::update(double dt)
 {
 	sf::Time deltaTime;
 	
-	
+	//std::cout << std::size(m_tile) << std::endl;
 	//std::cout << mouse.getPosition(m_window).x << std::endl;
 	
 }
@@ -169,14 +167,12 @@ void Game::render()
 {
 	m_window.clear(sf::Color::Black);
 
-	for (int x = 0; x < 50; x++) {
-		for (int y = 0; y < 50; y++) {
-
-			m_tile[x][y]->render(m_window);
+	for (int i = 0; i < 50; i++) {
+		for (int j = 0; j < 50; j++) {
+			
+			m_tile[j][i]->render(m_window);
 		}
-	
 	}
 	m_window.display();
 }
-
 

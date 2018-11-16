@@ -17,7 +17,7 @@ protected:
 	void render();
 	void processEvents();
 	void processGameEvents(sf::Event&);
-
+	void generateDijkstraGrid();
 	// main window
 	sf::RenderWindow m_window;
 	//std::vector<Tile*> m_tiles;
@@ -28,6 +28,7 @@ protected:
 	sf::Font m_font;
 	bool Leftpressed = false;
 	bool Rightpressed = false;
+	//Tile dijkstraGrid;
 };
 
 #endif

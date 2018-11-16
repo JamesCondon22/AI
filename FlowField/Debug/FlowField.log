@@ -1,5 +1,6 @@
 ﻿  Game.cpp
-c:\users\gameuser\desktop\ai\flowfield\game.cpp(68): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
-  main.cpp
+c:\users\gameuser\desktop\ai\flowfield\game.cpp(61): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
+  Tile.cpp
+c:\users\gameuser\desktop\ai\flowfield\tile.cpp(6): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   Generating Code...
   FlowField.vcxproj -> C:\Users\gameuser\Desktop\AI\FlowField\Debug\FlowField.exe
