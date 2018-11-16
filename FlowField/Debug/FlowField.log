@@ -1,0 +1,5 @@
+﻿  Game.cpp
+c:\users\gameuser\desktop\ai\flowfield\game.cpp(68): warning C4244: '-=': conversion from 'const double' to 'sf::Int32', possible loss of data
+  main.cpp
+  Generating Code...
+  FlowField.vcxproj -> C:\Users\gameuser\Desktop\AI\FlowField\Debug\FlowField.exe
