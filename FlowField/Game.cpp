@@ -30,13 +30,13 @@ Game::Game()
 	
 	
 
-	for (int i = 0; i < 50; i++) {
-		for (int j = 0; j < 50; j++) {	 
-			m_tile[j][i] = new Tile(25 * j,25 * i,m_font);
+	for (int i = 0; i < 25; i++) {
+		for (int j = 0; j < 25; j++) {	 
+			m_tile[j][i] = new Tile(50 * j,50 * i,m_font, j, i);
+			//m_tile[j][i]->setPos(j, i);
 		}	
 	}
 
-	initObstacles();
 }
 
 
@@ -97,8 +97,7 @@ void Game::processEvents()
 /// <param name="event">system event</param>
 void Game::processGameEvents(sf::Event& event)
 {
-	
-	//mouse.getPosition();
+
 
 	if (!sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
@@ -113,14 +112,14 @@ void Game::processGameEvents(sf::Event& event)
 		Leftpressed = true;
 		if (mouse.getPosition(m_window).x > 0 && mouse.getPosition(m_window).x < 1250) {
 			if (mouse.getPosition(m_window).y > 0 && mouse.getPosition(m_window).y < 1250) {
-				int x = mouse.getPosition(m_window).x / 25;
-				int y = mouse.getPosition(m_window).y / 25;
-				std::cout << x << ", " << y << std::endl;
+				int x = mouse.getPosition(m_window).x / 50;
+				int y = mouse.getPosition(m_window).y / 50;
 				if (m_starttile != NULL)
 				{
 					m_starttile->changeColor();
+
+					m_starttile = m_tile[x][y];
 				}
-				m_starttile = m_tile[x][y];
 				m_tile[x][y]->setStart();
 			}
 		}
@@ -129,17 +128,30 @@ void Game::processGameEvents(sf::Event& event)
 		Rightpressed = true;
 		if (mouse.getPosition(m_window).x > 0 && mouse.getPosition(m_window).x < 1250) {
 			if (mouse.getPosition(m_window).y > 0 && mouse.getPosition(m_window).y < 1250) {
-				int x = mouse.getPosition(m_window).x / 25;
-				int y = mouse.getPosition(m_window).y / 25;
-				std::cout << x << ", " << y << std::endl;
+				int x = mouse.getPosition(m_window).x / 50;
+				int y = mouse.getPosition(m_window).y / 50;
 				if (m_goaltile != NULL) {
-					m_goaltile->changeColor();
+					//m_goaltile->changeColor();
 				}
 				m_goaltile = m_tile[x][y];
-				m_tile[x][y]->setGoal();
+				//m_tile[x][y]->setGoal();
+				breadthFirst(m_goaltile->getXpos(), m_goaltile->getYpos());
+
 			}
 		}
 	}
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		if (mouse.getPosition(m_window).x > 0 && mouse.getPosition(m_window).x < 1250) {
+			if (mouse.getPosition(m_window).y > 0 && mouse.getPosition(m_window).y < 1250) {
+				int x = mouse.getPosition(m_window).x / 50;
+				int y = mouse.getPosition(m_window).y / 50;
+				m_tile[x][y]->setObstacle();
+			}
+		}
+	}
+
+	
 }
 
 /// <summary>
@@ -150,10 +162,8 @@ void Game::update(double dt)
 {
 	sf::Time deltaTime;
 	
-	//std::cout << std::size(m_tile) << std::endl;
-	//std::cout << mouse.getPosition(m_window).x << std::endl;
-	
-}
+
+}	
 
 
 
@@ -169,8 +179,8 @@ void Game::render()
 {
 	m_window.clear(sf::Color::Black);
 
-	for (int i = 0; i < 50; i++) {
-		for (int j = 0; j < 50; j++) {
+	for (int i = 0; i < 25; i++) {
+		for (int j = 0; j < 25; j++) {
 			
 			m_tile[j][i]->render(m_window);
 		}
@@ -178,29 +188,93 @@ void Game::render()
 	m_window.display();
 }
 
-void Game::initObstacles() {
-	m_tile[5][10]->setObstacle();
-	m_tile[5][11]->setObstacle();
-	m_tile[5][12]->setObstacle();
-	m_tile[5][13]->setObstacle();
-	m_tile[5][14]->setObstacle();
 
-	m_tile[20][20]->setObstacle();
-	m_tile[20][21]->setObstacle();
-	m_tile[20][22]->setObstacle();
-	m_tile[20][23]->setObstacle();
-	m_tile[20][24]->setObstacle();
-	m_tile[20][25]->setObstacle();
-	m_tile[21][25]->setObstacle();
-	m_tile[22][25]->setObstacle();
-	m_tile[23][25]->setObstacle();
-	m_tile[24][25]->setObstacle();
-	m_tile[25][25]->setObstacle();
-	m_tile[26][25]->setObstacle();
 
-	m_tile[35][35]->setObstacle();
-	m_tile[35][36]->setObstacle();
-	m_tile[35][37]->setObstacle();
-	m_tile[35][38]->setObstacle();
-	m_tile[35][39]->setObstacle();
+void Game::breadthFirst(int posX, int posY) {
+
+	
+	m_tile[posX][posY]->setVisited(true);
+	std::list<Tile*> queue;
+	queue.push_back(m_tile[posX][posY]);
+	int lowest = 0;
+
+	while (!queue.empty())
+	{
+		auto gridPos = queue.front()->getGridPos();
+		auto costPos = gridPos;
+		auto cost = queue.front()->getCost();
+		auto rotation = 0.0f;
+
+
+		if (costPos.first > 0)
+		{
+			costPos.first--;
+			addToQueue(costPos, gridPos, cost, queue);
+		}
+		if (costPos.first < 24)
+		{
+			costPos.first++;
+			addToQueue(costPos, gridPos, cost, queue);
+		}
+		
+		if (costPos.second > 0)
+		{
+			costPos.second--;
+			addToQueue(costPos, gridPos, cost, queue);
+		}
+		if (costPos.second < 24)
+		{
+			costPos.second++;
+			addToQueue(costPos, gridPos, cost, queue);
+		}
+		//if (costPos.first > 0 && costPos.second > 0)
+		//{
+		//	costPos.first--;
+		//	costPos.second--;
+		//	addToQueue(costPos, gridPos, cost, queue);
+		//}
+		//if (costPos.first > 0 && costPos.second < 24)
+		//{
+		//	costPos.first--;
+		//	costPos.second++;
+		//	addToQueue(costPos, gridPos, cost, queue);
+		//}
+		//if (costPos.first < 24 && costPos.second > 0)
+		//{
+		//	costPos.first++;
+		//	costPos.second--;
+		//	addToQueue(costPos, gridPos, cost, queue);
+		//}
+		//if (costPos.first < 24 && costPos.second < 24)
+		//{
+		//	costPos.first++;
+		//	costPos.second++;
+		//	addToQueue(costPos, gridPos, cost, queue);
+		//}
+		queue.pop_front();
+		
+	}
+
+	
+}
+void Game::addToQueue(std::pair<int, int>& currentPos, std::pair<int, int>& pos, int& cost, std::list<Tile*>& queue) {
+	if (!m_tile[currentPos.first][currentPos.second]->getVisited() && !m_tile[currentPos.first][currentPos.second]->getObstacle())
+	{
+		auto currentTop = (queue.front()->getGridPos());
+		m_tile[currentPos.first][currentPos.second]->setVectorPosition(currentTop);
+		m_tile[currentPos.first][currentPos.second]->setColor(sf::Color(255, 200 - (cost * 4), 215 - (cost * 2), 221 - (cost * 3)));
+		m_tile[currentPos.first][currentPos.second]->setVisited(true);
+		m_tile[currentPos.first][currentPos.second]->setCost(cost + 1);
+		queue.push_back(m_tile[currentPos.first][currentPos.second]);
+		
+	}
+	currentPos = pos;
+}
+
+void Game::checkLowest(int lowest, int current)
+{
+	if (current < lowest)
+	{
+		current = lowest;
+	}
 }
